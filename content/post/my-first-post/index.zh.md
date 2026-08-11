@@ -1,12 +1,14 @@
 ---
-title: "心指红尘剑指天"
-description: 
-date: 2026-08-11T10:06:06+08:00
-image: 
-math: 
-license: 
-comments: true
-draft: true
-build:
-    list: always    # Change to "never" to hide the page from the list
+title: "心指红尘剑☞天"
+description: "使用本 GitHub Template 模板，无需本地安装，直接通过 GitHub Actions 快速部署你的 Hugo 博客。"
+date: 2026-04-09
+lastmod: 2026-04-23
+weight: 1
+categories:
+    - Tutorial
+tags:
+    - Hugo
+    - 入门
+    - 部署
+    - GitHub Pages
 ---
