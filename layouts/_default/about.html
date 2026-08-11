@@ -1,0 +1,441 @@
+{{ define "main" }}
+
+<style>
+    :root {
+        --about-gap: 2rem;
+        --about-text-size: 1.15rem;
+        --timeline-text-size: 1.35rem;
+    }
+
+    .about-page-wrapper {
+        max-width: 100%;
+        display: flex;
+        flex-direction: column;
+        gap: 2.5rem;
+        opacity: 0;
+        animation: aboutFadeIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    @keyframes aboutFadeIn {
+        from { opacity: 0; transform: translateY(10px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    .section-heading {
+        font-size: 1.7rem;
+        font-weight: 700;
+        margin: 0;
+        padding-left: 0.5rem;
+        color: var(--card-text-color-main);
+        display: flex;
+        align-items: center;
+        gap: 0.8rem;
+    }
+
+    .card {
+        background: var(--card-background);
+        border: 1px solid var(--card-border-color);
+        box-shadow: var(--shadow-l1);
+        border-radius: var(--card-border-radius, 16px);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .icon-box {
+        width: 44px; height: 44px;
+        border-radius: 12px;
+        display: flex; justify-content: center; align-items: center;
+        flex-shrink: 0;
+    }
+    .icon-box.orange { background: rgba(255, 159, 67, 0.15); color: #ff9f43; }
+    .icon-box.purple { background: rgba(108, 92, 231, 0.15); color: #6c5ce7; }
+    
+    [data-scheme="dark"] .icon-box.orange { background: rgba(255, 159, 67, 0.2); }
+    [data-scheme="dark"] .icon-box.purple { background: rgba(108, 92, 231, 0.2); }
+
+    .simple-hero {
+        padding: 3rem 2rem;
+        text-align: center;
+        display: flex; flex-direction: column; align-items: center; gap: 1rem;
+        background: var(--card-background);
+        border: 1px solid var(--card-border-color);
+        position: relative;
+        overflow: hidden;
+        z-index: 1;
+    }
+    .simple-hero::before {
+        content: "";
+        position: absolute;
+        top: 0; left: 0; right: 0; bottom: 0;
+        background: radial-gradient(circle at top right, rgba(var(--accent-color-rgb), 0.1), transparent 50%),
+                    radial-gradient(circle at bottom left, rgba(var(--accent-color-rgb), 0.05), transparent 40%);
+        z-index: -1;
+    }
+    .hero-greeting {
+        font-size: 1.6rem;
+        font-weight: 700;
+        color: var(--card-text-color-main);
+        display: flex;
+        align-items: center;
+        gap: 0.6rem;
+        margin-bottom: 0.5rem;
+        opacity: 0.9;
+    }
+    .wave {
+        display: inline-block;
+        animation: wave-animation 2.5s infinite;
+        transform-origin: 70% 70%;
+    }
+    @keyframes wave-animation {
+        0% { transform: rotate( 0.0deg) }
+        10% { transform: rotate(14.0deg) }
+        20% { transform: rotate(-8.0deg) }
+        30% { transform: rotate(14.0deg) }
+        40% { transform: rotate(-4.0deg) }
+        50% { transform: rotate(10.0deg) }
+        60% { transform: rotate( 0.0deg) }
+        100% { transform: rotate( 0.0deg) }
+    }
+    .hero-name { font-size: 3.5rem; margin: 0; font-weight: 900; color: var(--card-text-color-main); line-height: 1.1; letter-spacing: -0.02em; }
+    .hero-role { font-size: 1.6rem; color: var(--card-text-color-secondary); font-weight: 700; margin: 0.2rem 0; opacity: 1; }
+    .hero-tags { display: flex; gap: 1.2rem; flex-wrap: wrap; justify-content: center; margin-top: 1.5rem; }
+    .tag-pill {
+        padding: 10px 22px;
+        background: var(--card-background);
+        color: var(--card-text-color-main);
+        border-radius: 50px;
+        font-size: 1.35rem;
+        border: 2px solid var(--card-border-color);
+        font-weight: 700;
+        transition: all 0.2s;
+        box-shadow: var(--shadow-l1);
+    }
+    
+    [data-scheme="dark"] .simple-hero,
+    [data-scheme="dark"] .tag-pill {
+        border-color: rgba(255, 255, 255, 0.45) !important;
+        border-width: 2.5px;
+        background: rgba(255, 255, 255, 0.05);
+    }
+
+    .tag-pill:hover {
+        border-color: var(--card-text-color-main);
+        color: var(--card-text-color-main);
+        transform: translateY(-2px);
+    }
+
+    .about-links-container {
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+    }
+    .about-links-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: var(--about-gap);
+    }
+    .link-card {
+        padding: 2rem;
+        display: flex; align-items: center; gap: 1.5rem;
+        text-decoration: none; position: relative; overflow: hidden;
+    }
+    .link-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-l2); }
+    .link-icon {
+        width: 60px; height: 60px;
+        background: var(--body-background);
+        border-radius: 14px;
+        display: flex; justify-content: center; align-items: center;
+        flex-shrink: 0;
+        overflow: hidden;
+    }
+    [data-scheme="light"] .link-icon {
+        background: #e8eaec;
+    }
+    .link-icon img {
+        width: 40px;
+        height: 40px;
+        object-fit: contain;
+        border-radius: 4px;
+    }
+    .link-info h3 { margin: 0; font-size: 1.45rem; color: var(--card-text-color-main); font-weight: 700; }
+    .link-info p { margin: 6px 0 0 0; font-size: 1.25rem; color: var(--card-text-color-secondary); line-height: 1.5; }
+    
+    .about-details-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: var(--about-gap);
+        align-items: stretch;
+    }
+    .detail-group {
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+    }
+    .detail-section { 
+        padding: 2.5rem; 
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+    }
+    .detail-list { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 1.4rem; }
+    .detail-list li { display: flex; align-items: center; gap: 1.2rem; }
+    .detail-icon { color: var(--card-text-color-tertiary); display: flex; align-items: center; width: 28px; justify-content: center; }
+    .detail-label { font-weight: 600; color: var(--card-text-color-secondary); min-width: 70px; font-size: 1.35rem; }
+    .detail-content { color: var(--card-text-color-main); font-weight: 500; font-size: 1.35rem; }
+   
+    .about-timeline-container {
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+        margin: 0;
+    }
+
+    .timeline-container {
+        margin-top: 3rem;
+    }
+
+    .about-content-container {
+        padding: 0; 
+        overflow: hidden;
+    }
+    .about-content-body {
+        margin-top: 2rem;
+        margin-bottom: 0rem;
+    }
+    
+    .about-content-body h2 {
+        display: none; 
+    }
+    .about-content-body h3 { font-size: 1.4rem; }
+    .about-content-body p, 
+    .about-content-body li,
+    .about-content-body span { 
+        font-size: var(--timeline-text-size); 
+        line-height: 1.8; 
+    }
+
+    .about-sponsor-container {
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+        margin-bottom: 2rem;
+    }
+    .sponsor-card {
+        padding: 2.5rem;
+        display: flex; justify-content: space-between; align-items: center; gap: 2rem;
+    }
+    .sponsor-info { flex: 1; }
+    .sponsor-info p { margin: 0; font-size: 1.45rem; color: var(--card-text-color-main); line-height: 1.7; max-width: 800px; }
+    
+    .sponsor-action { flex-shrink: 0; }
+    .sponsor-btn {
+        display: inline-block;
+        background: linear-gradient(135deg, #f39c12, #e67e22);
+        color: #ffffff !important;
+        padding: 12px 36px;
+        border-radius: 50px;
+        font-size: 1.55rem;
+        font-weight: 700;
+        text-decoration: none;
+        transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        border: none;
+        box-shadow: 0 8px 20px rgba(230, 126, 34, 0.25);
+    }
+
+    .sponsor-btn:hover {
+        transform: translateY(-5px) scale(1.03);
+        box-shadow: 0 12px 28px rgba(230, 126, 34, 0.4);
+        filter: brightness(1.05);
+    }
+    
+    [data-scheme="dark"] .sponsor-btn {
+        background: transparent;
+        border: 1px solid #e67e22;
+        color: #e67e22 !important;
+        box-shadow: none;
+    }
+
+    [data-scheme="dark"] .sponsor-btn:hover {
+        background: #e67e22;
+        color: #fff !important;
+        box-shadow: 0 10px 25px rgba(230, 126, 34, 0.4);
+    }
+
+    @media (max-width: 900px) {
+        .about-details-grid { grid-template-columns: 1fr; }
+        .hero-name { font-size: 2.4rem; }
+        .sponsor-card { flex-direction: column; align-items: flex-start; text-align: left; }
+        .sponsor-action { align-self: center; }
+        .simple-hero { padding: 2.5rem 2rem; }
+        .tag-pill { font-size: 1.2rem;padding: 0.5rem 1rem; }
+        .hero-tags { margin-top: 1rem; }
+    }
+    @media (max-width: 600px) {
+        .about-page-wrapper { gap: 1.8rem; }
+        .about-links-grid { grid-template-columns: 1fr; }
+        .about-content-body { padding-left: 1.5rem; padding-right: 1.5rem; }
+        .detail-section { padding: 2rem; }
+        .detail-label, .detail-content { font-size: 1.4rem; } 
+    }
+</style>
+
+{{- $fallbackIcons := partial "helper/fallback-icons.html" . -}}
+
+<div class="about-page-wrapper">
+    
+    {{ with .Params.profile }}
+    <div class="simple-hero card">
+        <div class="hero-greeting">
+            <span class="wave">👋</span> {{ T "about.greeting_prefix" | default "Hey, I'm" }}
+        </div>
+        <h1 class="hero-name">{{ .name }}</h1>
+        <p class="hero-role">{{ .role }}</p>
+        <div class="hero-tags">
+            {{ range .tags }}
+            <span class="tag-pill">{{ . }}</span>
+            {{ end }}
+        </div>
+    </div>
+    {{ end }}
+
+    {{ with .Params.links }}
+    <div class="about-links-container">
+        {{ if $.Params.section_titles.links }}
+        <h2 class="section-heading">{{ $.Params.section_titles.links }}</h2>
+        {{ end }}
+        <div class="about-links-grid">
+            {{ range . }}
+            <a href="{{ .website }}" target="_blank" class="link-card card">
+                <div class="link-icon" style='color: {{ .color | default "var(--card-text-color-main)" }}'>
+                    {{ $iconName := .image }}
+                    {{ $svgIcon := resources.Get (printf "icons/%s.svg" $iconName) }}
+                    {{ $pngIcon := resources.Get (printf "icons/%s.png" $iconName) }}
+                    {{ if $svgIcon }}
+                        <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                            {{ $svgIcon.Content | safeHTML }}
+                        </svg>
+                    {{ else if $pngIcon }}
+                        <img src="{{ $pngIcon.RelPermalink }}" width="40" height="40" alt="{{ .title }}" style="object-fit: contain;">
+                    {{ else }}
+                        <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                            <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                            {{ index $fallbackIcons $iconName | default (index $fallbackIcons "default") | safeHTML }}
+                        </svg>
+                    {{ end }}
+                </div>
+                <div class="link-info">
+                    <h3>{{ .title }}</h3>
+                    <p>{{ .description }}</p>
+                </div>
+            </a>
+            {{ end }}
+        </div>
+    </div>
+    {{ end }}
+
+    {{ if or .Params.about_me .Params.about_site }}
+    <div class="about-details-grid">
+        {{ with .Params.about_me }}
+        <div class="detail-group">
+            <h2 class="section-heading">{{ $.Params.section_titles.about_me | default "About Me" }}</h2>
+            <div class="detail-section card">
+                <ul class="detail-list">
+                    {{ range . }}
+                    <li>
+                        <span class="detail-icon">
+                            {{ $iconName := .icon }}
+                            {{ $localIcon := resources.Get (printf "icons/%s.svg" $iconName) }}
+                            {{ if $localIcon }}
+                                <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                    {{ $localIcon.Content | safeHTML }}
+                                </svg>
+                            {{ else }}
+                                <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                    {{ index $fallbackIcons $iconName | default (index $fallbackIcons "default") | safeHTML }}
+                                </svg>
+                            {{ end }}
+                        </span>
+                        <span class="detail-label">{{ .label }}:</span>
+                        {{ if .link }}
+                            <a href="{{ .link }}" target="_blank" class="detail-content link">{{ .text }}</a>
+                        {{ else }}
+                            <span class="detail-content">{{ .text }}</span>
+                        {{ end }}
+                    </li>
+                    {{ end }}
+                </ul>
+            </div>
+        </div>
+        {{ end }}
+
+        {{ with .Params.about_site }}
+        <div class="detail-group">
+            <h2 class="section-heading">{{ $.Params.section_titles.about_site | default "About Website" }}</h2>
+            <div class="detail-section card">
+                <ul class="detail-list">
+                    {{ range . }}
+                    <li>
+                        <span class="detail-icon">
+                            {{ $iconName := .icon }}
+                            {{ $localIcon := resources.Get (printf "icons/%s.svg" $iconName) }}
+                            {{ if $localIcon }}
+                                <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                    {{ $localIcon.Content | safeHTML }}
+                                </svg>
+                            {{ else }}
+                                <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                    {{ index $fallbackIcons $iconName | default (index $fallbackIcons "default") | safeHTML }}
+                                </svg>
+                            {{ end }}
+                        </span>
+                        <span class="detail-label">{{ .label }}:</span>
+                        {{ if .link }}
+                            <a href="{{ .link }}" target="_blank" class="detail-content link">{{ .text }}</a>
+                        {{ else }}
+                            <span class="detail-content">{{ .text }}</span>
+                        {{ end }}
+                    </li>
+                    {{ end }}
+                </ul>
+            </div>
+        </div>
+        {{ end }}
+    </div>
+    {{ end }}
+
+    {{ if .Content }}
+    <div class="about-timeline-container">
+        <h2 class="section-heading">{{ .Params.section_titles.timeline | default "Timeline" }}</h2>
+        <div class="about-content-container card">
+            <div class="about-content-body">
+                {{ .Content }}
+            </div>
+        </div>
+    </div>
+    {{ end }}
+
+    {{ with .Params.sponsor }}
+    {{ if .enable }}
+    <div class="about-sponsor-container">
+        <h2 class="section-heading">{{ .title }}</h2>
+        <div class="sponsor-card card">
+            <div class="sponsor-info">
+                <p>{{ .text }}</p>
+            </div>
+            <div class="sponsor-action">
+                <a href="{{ .link }}" target="_blank" class="sponsor-btn">
+                    {{ .btn_text | default "Buy me a Coffee" }}
+                </a>
+            </div>
+        </div>
+    </div>
+    {{ end }}
+    {{ end }}
+
+    {{ partialCached "comments/provider/waline" . }}
+
+</div>
+
+{{ partialCached "footer/footer" . }}
+{{ end }}

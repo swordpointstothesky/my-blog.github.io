@@ -1,0 +1,264 @@
+/* Mobile header and sidebar styles */
+
+.mobile-header {
+    display: none;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    background: var(--body-background);
+}
+
+.mobile-header .mobile-home-link {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    height: 100%;
+
+    .site-name {
+        font-size: 1.7rem;
+        font-weight: bold;
+        color: var(--card-text-color-main);
+    }
+
+    .mobile-avatar {
+        width: 28px;
+        height: 28px;
+        border-radius: 50%;
+        margin-right: 10px;
+        object-fit: cover;
+    }
+}
+
+.mobile-header .mobile-header-right {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    height: 100%;
+}
+
+.mobile-header-button,
+#mobile-menu-toggle {
+    background: none;
+    border: none;
+    padding: 0;
+    margin: 0;
+    cursor: pointer;
+    color: var(--body-text-color);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    outline: none;
+    position: relative;
+    z-index: 105;
+    transition: transform 0.2s ease;
+    width: 32px;
+    height: 40px;
+
+    &:active { transform: scale(0.9); }
+
+    svg {
+        width: 22px;
+        height: 22px;
+        stroke-width: 2;
+        display: block;
+    }
+
+    .language-label {
+        font-size: 1.5rem;
+        font-weight: 700;
+        line-height: 1;
+        display: block;
+        text-align: center;
+    }
+
+    &#mobile-dark-mode-toggle {
+        .icon-tabler-moon { display: none; }
+    }
+}
+
+/* Search box: Use higher specificity instead of !important */
+.left-sidebar .sidebar-search {
+    margin: 0;
+    padding: 0;
+
+    .search-form.widget {
+        margin-bottom: 5px;
+        --button-size: 40px;
+        border: 1px solid var(--card-border);
+        background: var(--card-background);
+        border-radius: 10px;
+        overflow: hidden;
+        position: relative;
+        box-shadow: var(--shadow-l1);
+
+        label {
+            display: none;
+        }
+
+        p {
+            margin: 0;
+            padding: 0;
+            background: none;
+            display: block;
+        }
+
+        input[type="search"],
+        input[type="text"],
+        input {
+            padding: 12px 45px 12px 15px;
+            height: 40px;
+            background: transparent;
+            box-shadow: none;
+            font-size: 1.4rem;
+            border: none;
+            width: 100%;
+            color: var(--card-text-color-main);
+
+            &:focus {
+                box-shadow: none;
+                outline: none;
+            }
+
+            &::placeholder {
+                color: var(--card-text-color-tertiary);
+                opacity: 0.7;
+            }
+        }
+
+        button[type="submit"],
+        button {
+            width: var(--button-size);
+            height: 40px;
+            position: absolute;
+            right: 0;
+            top: 0;
+            background: none;
+            border: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            cursor: pointer;
+
+            svg {
+                width: 18px;
+                height: 18px;
+                color: var(--card-text-color-tertiary);
+            }
+
+            &:hover svg {
+                color: var(--accent-color);
+            }
+        }
+    }
+}
+
+.sidebar-inner {
+    display: flex;
+    flex-direction: column;
+    gap: var(--sidebar-element-separation, 20px);
+    height: 100%;
+}
+
+@media (max-width: 767px) {
+    .mobile-header {
+        display: flex;
+        padding: 0 2px;
+    }
+
+    /* ID selector has highest specificity by default */
+    #toggle-menu { display: none; }
+
+    .left-sidebar .sidebar-search { display: none; }
+
+    .sidebar-inner {
+        display: none;
+        padding-bottom: 10px;
+
+        &.active {
+            display: flex;
+            animation: sidebarFadeIn 0.3s ease-out;
+
+            #main-menu {
+                display: flex;
+                flex-direction: column;
+                margin: 0;
+                padding: 12px;
+                background: var(--card-background);
+                border: 1px solid var(--card-border);
+                border-radius: var(--card-border-radius);
+                box-shadow: var(--shadow-l1);
+                gap: 5px;
+
+                li {
+                    list-style: none;
+
+                    a {
+                        display: flex;
+                        align-items: center;
+                        gap: 12px;
+                        padding: 10px 12px;
+                        border-radius: 8px;
+                        font-weight: 500;
+                        color: var(--card-text-color-main);
+                        transition: all 0.2s;
+
+                        span { font-size: 1.5rem; }
+                        svg { width: 22px; height: 22px; }
+                    }
+
+                    &.current a {
+                        color: var(--accent-color);
+                        font-weight: 700;
+                        background: var(--card-background-selected);
+                    }
+                }
+
+                .menu-bottom-section { display: none; }
+            }
+        }
+    }
+
+    .left-sidebar.mobile-menu-open {
+        .mobile-header { background: transparent; }
+
+        .mobile-home-link {
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.2s ease;
+        }
+
+        .sidebar-inner.active {
+            margin-top: -45px;
+            padding-top: 10px;
+            background: var(--body-background);
+        }
+    }
+}
+
+[data-scheme="dark"] {
+    #mobile-dark-mode-toggle {
+        .icon-tabler-sun { display: none; }
+        .icon-tabler-moon { display: block; }
+    }
+
+    /* Use ID selector for high specificity over theme defaults */
+    #mobile-menu-toggle.is-active .hamburger-inner,
+    #mobile-menu-toggle.is-active .hamburger-inner::before,
+    #mobile-menu-toggle.is-active .hamburger-inner::after {
+        background-color: var(--accent-color);
+    }
+}
+
+#mobile-menu-toggle.is-active .hamburger-inner,
+#mobile-menu-toggle.is-active .hamburger-inner::before,
+#mobile-menu-toggle.is-active .hamburger-inner::after {
+    background-color: var(--accent-color);
+}
+
+@keyframes sidebarFadeIn {
+    from { opacity: 0; transform: translateY(-5px); }
+    to { opacity: 1; transform: translateY(0); }
+}

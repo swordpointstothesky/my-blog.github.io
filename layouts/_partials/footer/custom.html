@@ -1,0 +1,82 @@
+{{- /* Custom footer content - Add your custom content here */ -}}
+
+<!-- Auto collapse long code blocks -->
+<script>
+  (function() {
+    function initCodeBlocks() {
+      // Height threshold for collapse
+      const MAX_HEIGHT = 600; 
+      
+      // Select code blocks in article content
+      const highlightBlocks = document.querySelectorAll('.article-content .highlight');
+      
+      highlightBlocks.forEach(block => {
+        if (block.dataset.codeConfigured) return;
+        
+        const pre = block.querySelector('pre');
+        const height = pre ? pre.scrollHeight : block.scrollHeight;
+
+        if (height > MAX_HEIGHT + 40) {
+          block.classList.add('collapsed');
+          
+          const expandBtn = document.createElement('div');
+          expandBtn.className = 'code-expand-btn';
+          expandBtn.dataset.expand = "{{ if eq .Site.Language.Lang `en` }}Expand Code{{ else }}展开代码{{ end }}";
+          expandBtn.dataset.collapse = "{{ if eq .Site.Language.Lang `en` }}Collapse Code{{ else }}收起代码{{ end }}";
+          
+          block.appendChild(expandBtn);
+          
+        expandBtn.addEventListener('click', function() {
+          if (block.classList.contains('collapsed')) {
+            // Expand logic
+            block.classList.remove('collapsed');
+            block.classList.add('expanded');
+          } else {
+            // 1. Record the absolute position of the top of the current code block relative to the document
+            const offsetTop = block.getBoundingClientRect().top + window.pageYOffset;
+            
+            // 2. Temporarily disable smooth scroll
+            const html = document.documentElement;
+            const originalScrollBehavior = html.style.scrollBehavior;
+            html.style.scrollBehavior = 'auto';
+
+            // 3. Collapse
+            block.classList.remove('expanded');
+            block.classList.add('collapsed');
+
+            // 4. Scroll to top of the block
+            window.scrollTo(0, offsetTop - 80);
+
+            // 5. Restore original scroll behavior
+            requestAnimationFrame(() => {
+                html.style.scrollBehavior = originalScrollBehavior;
+            });
+          }
+        });
+        }
+        block.dataset.codeConfigured = 'true';
+      });
+    }
+
+    // Compatible with Hugo Theme Stack content loading mechanism
+    // Periodically check to handle dynamically loaded content (if any)
+    document.addEventListener('DOMContentLoaded', initCodeBlocks);
+    // Run again on load event to ensure styles are fully loaded for accurate height calculation
+    window.addEventListener('load', initCodeBlocks);
+  })();
+</script>
+
+<!-- Waline pageview batch fetch (for home/list/comment-disabled pages) -->
+{{ if and .Site.Params.comments.waline.serverURL (or .IsHome .IsNode (eq .Params.comments false)) }}
+<script src="//unpkg.com/@waline/client@v2/dist/pageview.js"></script>
+<script>
+    window.addEventListener('DOMContentLoaded', function() {
+        setTimeout(() => {
+            Waline.pageviewCount({
+                serverURL: '{{ .Site.Params.comments.waline.serverURL }}',
+                update: false
+            });
+        }, 100);
+    });
+</script>
+{{ end }}

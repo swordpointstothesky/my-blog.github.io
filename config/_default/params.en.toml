@@ -1,0 +1,29 @@
+# Pages placed under these sections will be shown on homepage and archive page.
+mainSections = ["post"]
+# Output page's full content in RSS.
+rssFullContent = true
+favicon        = "img/favicon.jpg"
+
+# Accepted values: "default", "lastmod"
+SortBy              = "default"
+
+[footer]
+    customText = "Custom footer content"
+
+[dateFormat]
+    published   = ":date_medium"
+    lastUpdated = ":date_medium"
+
+[sidebar]
+    emoji    = "🚀"
+    subtitle = "An starter template based on Hugo Theme Stack v4"
+    avatar   = "img/avatar.jpg"
+
+[article]
+    headingAnchor = true
+    math          = false
+    readingTime   = true
+
+    [article.license]
+        enabled = true
+        default = "Licensed under CC BY-NC-SA 4.0"

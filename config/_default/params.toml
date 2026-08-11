@@ -1,0 +1,37 @@
+# Global theme parameters
+
+[homepage]
+    # Set to true to enable 2-column grid layout
+    grid = true
+
+[footer]
+    since = 2024
+    launchDate = "2024-09-09"
+
+[widgets]
+    # homepage = [
+    #     { type = "search" },
+    #     { type = "archives", params = { limit = 5 } },
+    #     { type = "categories", params = { limit = 10 } },
+    #     { type = "tag-cloud", params = { limit = 10 } },
+    # ]
+    page = [{ type = "toc" }]
+
+[colorScheme]
+    toggle  = true
+    default = "auto"
+
+[comments]
+    enabled  = true
+    provider = "waline"
+    
+[comments.waline]
+    # IMPORTANT: Replace this with your own Waline server URL!
+    serverURL    = "https://waline-demo.liuhouliang.com/"
+    pageview     = true
+    emoji        = ["https://unpkg.com/@waline/emojis@1.0.1/weibo"]
+    requiredMeta = ["name"]
+
+    [comments.waline.locale]
+        admin       = "Admin"
+        placeholder = ""

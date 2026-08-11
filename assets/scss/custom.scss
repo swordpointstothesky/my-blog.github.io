@@ -1,0 +1,100 @@
+/*
+ * Custom styles for Hugo Theme Stack v4
+ */
+
+@import "partials/custom-components/homepage-grid";
+@import "partials/custom-components/mobile-menu";
+@import "partials/custom-components/footer";
+@import "partials/custom-components/code";
+@import "partials/custom-components/title";
+@import "partials/custom-components/timeline";
+
+:root {
+    --body-background: #f8f7f2;
+    --accent-color: #1B365D;
+    --accent-color-rgb: 27, 54, 93;
+    --accent-color-darker: #202A44;
+    --accent-color-text: #FFF;
+    --body-text-color: #2D3748;
+
+    --card-background: #fdfdfb;
+    --card-background-selected: #fdfdfb;
+    --card-border: transparent;
+    --card-text-color-main: #333333;
+    --card-text-color-secondary: #5d5d5d;
+    --card-text-color-tertiary: #8c8c8c;
+    --card-separator-color: rgba(0, 0, 0, 0.08);
+
+    --blockquote-background-color: #f2f1eb;
+    --code-background-color: #f2f1eb;
+    --code-text-color: #24292f;
+
+    &[data-scheme="dark"] {
+        --body-background: #101214;
+        --body-text-color: #c9d1d9;
+
+        --card-background: #1c2128;
+        --card-background-selected: #22272e;
+        --card-border: #30363d;
+
+        --card-text-color-main: #edf2f7;
+        --card-text-color-secondary: #aab4be;
+        --card-text-color-tertiary: #8b949e;
+        --card-separator-color: #383838;
+
+        --code-background-color: #2d333b;
+        --code-text-color: #adbac7;
+        --blockquote-background-color: #22272e;
+
+        img, video, iframe {
+            filter: brightness(.8) contrast(1.1);
+            transition: filter 0.5s ease-in-out;
+            &:hover { filter: brightness(1) contrast(1); }
+        }
+    }
+}
+
+
+/* TOC Scrollbar Optimization */
+.toc-nav {
+    /* Scrollbar */
+    &::-webkit-scrollbar {
+        width: 8px;
+        height: 8px;
+    }
+
+    /* Track */
+    &::-webkit-scrollbar-track {
+        background: transparent;
+        border-radius: 4px;
+    }
+
+    /* Thumb */
+    &::-webkit-scrollbar-thumb {
+        background: rgba(120, 130, 140, 0.25);
+        border-radius: 4px;
+        transition: background 0.2s ease;
+    }
+
+    /* Hover Thumb */
+    &::-webkit-scrollbar-thumb:hover {
+        background: rgba(120, 130, 140, 0.45);
+    }
+
+    /* Firefox */
+    scrollbar-width: auto;
+    scrollbar-color: rgba(120, 130, 140, 0.25) transparent;
+}
+
+/* Dark Mode TOC Scrollbar Optimization */
+[data-scheme="dark"] .toc-nav {
+    &::-webkit-scrollbar-thumb {
+        background: rgba(120, 130, 140, 0.35);
+    }
+
+    &::-webkit-scrollbar-thumb:hover {
+        background: rgba(120, 130, 140, 0.55);
+    }
+
+    scrollbar-color: rgba(120, 130, 140, 0.35) transparent;
+}
